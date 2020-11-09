@@ -23,9 +23,9 @@ using namespace cv::face;
 int main()
 {
 	int choice;
-	cout << "1. Recognise Face\n";
-	cout << "2. Add Face\n";
-	cout << "Choose One: ";
+	cout << "1. Arcfelismeres\n";
+	cout << "2. Arcdetektalas\n";
+	cout << "A valasztott szam: ";
 	cin >> choice;
 	switch (choice)
 	{

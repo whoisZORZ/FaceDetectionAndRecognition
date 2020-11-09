@@ -64,7 +64,7 @@ void detectAndDisplay(Mat frame)
 		resize(crop, res, Size(128, 128), 0, 0, INTER_LINEAR);
 		cvtColor(crop, gray, COLOR_BGR2GRAY);
 		stringstream ssfn;
-		filename = "D:\\Egyetem\\Faces\\";
+		filename = "D:\\Egyetem\\Faces\\train\\";
 		ssfn << filename.c_str() << name << filenumber << ".jpg";
 		filename = ssfn.str();
 		imwrite(filename, res);
@@ -75,21 +75,21 @@ void detectAndDisplay(Mat frame)
 		rectangle(frame, pt1, pt2, Scalar(0, 255, 0), 2, 8, 0);
 	}
 
-	sstm << "Crop area size: " << roi_b.width << "x" << roi_b.height << " Filename: " << filename;
+	sstm << "A kivagott resz merete: " << roi_b.width << "x" << roi_b.height << " Fajl neve: " << filename;
 	text = sstm.str();
 
 	if (!crop.empty())
 	{
-		imshow("detected", crop);
+		imshow("Arcdetektalas", crop);
 	}
 	else
-		destroyWindow("detected");
+		destroyWindow("Arcdetektalas");
 
 }
 
 void addFace()
 {
-	cout << "\nEnter your name: ";
+	cout << "\nAdja meg a nevet: ";
 	cin >> name;
 
 	VideoCapture capture(0);
@@ -99,12 +99,12 @@ void addFace()
 
     if (!face_cascade.load("C:\\OpenCV\\opencv\\build\\etc\\haarcascades\\haarcascade_frontalface_alt.xml"))
     {
-        cout << "error" << endl;
+        cout << "Hiba" << endl;
         return ;
     };
 
     Mat frame;
-	cout << "\nCapturing your face 10 times, press 'C' 10 times keeping your face front of the camera";
+	cout << "\nAz arcdetektalo 10 kepet keszit.\n";
 	char key;
 	int i = 0;
 
@@ -116,7 +116,7 @@ void addFace()
 		i++;
 		if (i == 10)
 		{
-			cout << "Face added";
+			cout << "Az arcrol keszult kepek hozza lettek adva a tanito kepekhez.\n";
 			break;
 		}
 
@@ -133,7 +133,7 @@ void addFace()
 
 static void dbread(vector<Mat>& images, vector<int>& labels) {
 	vector<cv::String> fn;
-	filename = "D:\\Egyetem\\Faces\\";
+	filename = "D:\\Egyetem\\Faces\\train";
 	glob(filename, fn, false);
 
 	size_t count = fn.size();
@@ -156,36 +156,36 @@ void eigenFaceTrainer() {
 	vector<Mat> images;
 	vector<int> labels;
 	dbread(images, labels);
-    cout << "Size of the images: " << images.size() << endl;
-	cout << "Size of the labels: " << labels.size() << endl;
-	cout << "Training begins..." << endl;
+    cout << "A tanito kepek szama jelenleg: " << images.size() << endl;
+	cout << "A tanito cimkek szama jelenleg: " << labels.size() << endl;
+	cout << "A tanitas megkezdodott!" << endl;
 
 	Ptr<EigenFaceRecognizer> model = EigenFaceRecognizer::create();
 
 	model->train(images, labels);
 
-	model->save("D:\\Egyetem\\Faces\\eigenface.yml");
+	model->save("D:\\Egyetem\\Faces\\train\\eigenface.yml");
 
-	cout << "Training finished...." << endl;  
+	cout << "A tanitas veget ert!" << endl;  
 	waitKey(10000);
 }
 
 void FaceRecognition() {
 
-	cout << "Start recognizing..." << endl;
+	cout << "Az arcfelismeres megkezdodott!" << endl;
 
 	Ptr<FaceRecognizer> model = FisherFaceRecognizer::create();
-	model->read("D:\\Egyetem\\Faces\\eigenface.yml");
+	model->read("D:\\Egyetem\\Faces\\train\\eigenface.yml");
 
-	Mat testSample = imread("D:\\Egyetem\\Faces\\0.jpg", 0);
+	Mat testSample = imread("D:\\Egyetem\\Faces\\train\\0.jpg", 0);
 
 	int img_width = testSample.cols;
 	int img_height = testSample.rows;
 
-	string window = "Capture - face detection";
+	string window = "Arcfelismeres";
 
 	if (!face_cascade.load("C:\\OpenCV\\opencv\\build\\etc\\haarcascades\\haarcascade_frontalface_alt.xml")) {
-		cout << "Error loading file" << endl;
+		cout << "Hiba a fajl betoltesekor" << endl;
 		return;
 	}
 
@@ -193,7 +193,7 @@ void FaceRecognition() {
 
 	if (!cap.isOpened())
 	{
-		cout << "exit" << endl;
+		cout << "Kilepes" << endl;
 		return;
 	}
 
@@ -237,7 +237,7 @@ void FaceRecognition() {
 				int label = -1; double confidence = 0;
 				model->predict(face_resized, label, confidence);
 
-				cout << " confidence " << confidence << " Label: " << label << endl;
+				cout << "Bizonyossag: " << confidence << " Cimke: " << label << endl;
 				
 				Pname = to_string(label);
 
@@ -251,8 +251,8 @@ void FaceRecognition() {
 
 			}
 
-			putText(original, "Frames: " + frameset, Point(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 1.0, CV_RGB(0, 255, 0), 1.0);
-			putText(original, "Number of people detected: " + to_string(faces.size()), Point(30, 90), FONT_HERSHEY_COMPLEX_SMALL, 1.0, CV_RGB(0, 255, 0), 1.0);
+			putText(original, "Kepkockak szama: " + frameset, Point(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 1.0, CV_RGB(0, 255, 0), 1.0);
+			putText(original, "Detektalt emberek szama: " + to_string(faces.size()), Point(30, 90), FONT_HERSHEY_COMPLEX_SMALL, 1.0, CV_RGB(0, 255, 0), 1.0);
 
 			cv::imshow(window, original);
 
