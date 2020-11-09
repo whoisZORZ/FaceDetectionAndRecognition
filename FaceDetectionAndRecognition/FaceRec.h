@@ -89,7 +89,7 @@ void detectAndDisplay(Mat frame)
 
 void addFace()
 {
-	cout << "\nAdja meg a nevet: ";
+	cout << "\nAdjon meg egy sorszamot: ";
 	cin >> name;
 
 	VideoCapture capture(0);

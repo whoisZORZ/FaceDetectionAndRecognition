@@ -25,7 +25,7 @@ int main()
 	int choice;
 	cout << "1. Arcfelismeres\n";
 	cout << "2. Arcdetektalas\n";
-	cout << "A valasztott szam: ";
+	cout << "A valasztott funkcio: ";
 	cin >> choice;
 	switch (choice)
 	{
